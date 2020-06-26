@@ -5,5 +5,13 @@
  * @returns {object} - returns the new object
  */
 export const pick = (obj, ...fields) => {
+	
+	var newObj = {};
+    for (let index in fields) {
+      var key = fields[index];
+    	newObj[key] = obj[key];     	
+    }
 
+    return newObj;
+	
 };
