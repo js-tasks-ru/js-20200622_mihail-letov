@@ -6,11 +6,9 @@
  */
 export const pick = (obj, ...fields) => {
 	
-	var newObj = {};
-    for (let index in fields) {
-      var key = fields[index];
-    	newObj[key] = obj[key];     	
-    }
+	let newObj = {};
+    fields.forEach(key => newObj[key] = obj[key]); 
+    return newObj;
 
     return newObj;
 	
