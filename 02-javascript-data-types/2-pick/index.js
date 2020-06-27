@@ -8,8 +8,5 @@ export const pick = (obj, ...fields) => {
 	
 	let newObj = {};
     fields.forEach(key => newObj[key] = obj[key]); 
-    return newObj;
-
-    return newObj;
-	
+    return newObj;	
 };
