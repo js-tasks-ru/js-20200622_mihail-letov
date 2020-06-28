@@ -6,24 +6,32 @@
  */
  
 //https://thread.engineering/2018-08-29-searching-and-sorting-text-with-diacritical-marks-in-javascript/
+//https://stackoverflow.com/questions/19487815/passing-additional-parameters-in-the-comparefunction-of-sort-method
+ 
+Array.prototype.customSort = function (sortParam) {
+	
+	function compare(a, b) {
+		if (a === b) return 0;	
+		const locCompare = a.localeCompare(b, 'ru');
+		const lowerCase = (a.toLowerCase() === b.toLowerCase()) ? "lowerCaseEqual" : "lowerCaseNotEqual";
+		const arRes = {
+			"asc": {
+				"lowerCaseEqual": locCompare*-1,			
+				"lowerCaseNotEqual": locCompare	
+			},
+			"desc": {
+				"lowerCaseEqual": locCompare,		
+				"lowerCaseNotEqual": locCompare*-1	
+			}	
+		};
+		return arRes[sortParam][lowerCase];
+	}
+	return this.sort(compare);
+	
+}
  
 export function sortStrings(arr, param = 'asc') {
-	let arRes = arr.slice().sort(compareFunction);
-	if (param === 'desc') arRes = arRes.reverse();
+	let arRes = [...arr].customSort(param);
 	return arRes;
 }
 
-function compareFunction(a, b) {
-
-	if (a === b) return 0;
-
-	let aWithoutDiacritics = a.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-	let bWithoutDiacritics = b.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-		
-	if (aWithoutDiacritics.toLowerCase() > bWithoutDiacritics.toLowerCase()) return 1;
-	if (aWithoutDiacritics.toLowerCase() < bWithoutDiacritics.toLowerCase()) return -1;
-
-    if (a > b) return 1;
-    if (a < b) return -1;	
-	
-}

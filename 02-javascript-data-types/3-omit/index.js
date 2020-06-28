@@ -5,7 +5,7 @@
  * @returns {object} - returns the new object
  */
 export const omit = (obj, ...fields) => {
-	let resObj = {};
+	const resObj = {};
 	let keys = Object.keys(obj);	
 	keys.forEach(key => {
 		if (!fields.includes(key)) {
