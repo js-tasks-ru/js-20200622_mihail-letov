@@ -6,7 +6,7 @@
  */
 export const omit = (obj, ...fields) => {
 	const resObj = {};
-	let keys = Object.keys(obj);	
+	const keys = Object.keys(obj);	
 	keys.forEach(key => {
 		if (!fields.includes(key)) {
 			resObj[key] = obj[key];
