@@ -89,7 +89,7 @@ export default class ColumnChart {
     }
 
     update(newOptions) {
-        console.log(this.options.data);
+        //console.log(this.options.data);
         this.options.data = newOptions.bodyData ?? [];
         let chart = this._element.querySelector(".column-chart__chart");
         this.fillChartData(chart);
