@@ -1,30 +1,23 @@
 export default class ColumnChart {
 
-    constructor(options) { 
+	chartHeight = 50;
+	
+    constructor(options = {}) { 
 
-        this.options = options;
-        this._element = this.renderChart();
-        let chart = this._element.querySelector(".column-chart__chart");
-        if (!this.isOptionsEmpty) this.fillChartData(chart);
-      //  return this._element;
+		this.options = options;
+		this.options.data = options.data || [];
+		
+        this.element = this.renderChart();
+        let chart = this.element.querySelector(".column-chart__chart");
+        if (this.options.data.length > 0) this.fillChartData(chart);
       
     }
-   
-    get element() 
-    {
-        return this._element;
-    }
-
-    set element(val) {
-        this.element = val;
-    }
-  
+		     
     fillChartData(chart) {        
         chart.innerHTML = "";
 
         const maxEl = Math.max(...this.options.data);
         const coeff = this.chartHeight/Math.max(...this.options.data);
-       // console.log(coeff);
 
         this.options.data.forEach(element => {
             const procent = Math.round((element*coeff)/(this.chartHeight/100));
@@ -37,66 +30,38 @@ export default class ColumnChart {
 
     renderChart() {
 
-       const wrapper = document.createElement("div");
+        const wrapper = document.createElement("div");
 
-       wrapper.setAttribute("class", "column-chart");
-       wrapper.setAttribute("style", `--chart-height: ${this.chartHeight}`);       
-       //if (this.options && this.options.className) wrapper.classList.add(this.options.className);  
-       if (this.isOptionsEmpty) wrapper.classList.add("column-chart_loading");  
-
-       const title = document.createElement("div");        
-       title.setAttribute("class", "column-chart__title");
-       if (this.options && this.options.label)  title.innerHTML = this.options.label;
-
-       if (this.options  && this.options.link) {
-            const link = document.createElement("a");        
+        wrapper.setAttribute("class", "column-chart");
+        wrapper.setAttribute("style", `--chart-height: ${this.chartHeight}`);       
+        if (this.options.data.length === 0) wrapper.classList.add("column-chart_loading"); 
+	   
+        let link;        
+	    if (this.options.link) {
+            link = document.createElement("a");        
             link.setAttribute("class", "column-chart__link");
-            link.setAttribute("href", this.options.link);
-            title.append(link);
-       }
-
-        const container = document.createElement("div");        
-        container.setAttribute("class", "column-chart__container");
-
-        const header = document.createElement("div");
-        header.setAttribute("class", "column-chart__header"); 
-        if (this.options  && this.options.value) header.innerHTML = this.options.value; 
-
-        const chart = document.createElement("div");
-        chart.setAttribute("class", "column-chart__chart");    
+            link.setAttribute("href", this.options.link);  
+            link.innerHTML = this.options.link;          
+        }       
         
-        container.appendChild(header); 
-        container.appendChild(chart);   
-
-        wrapper.appendChild(title); 
-        wrapper.appendChild(container);     
-        
-       // console.log("WRAPPER", wrapper);
+		wrapper.innerHTML = `
+							  <div class="column-chart__title">${this.options.label || ""}${ link ? link.outerHTML : ""}</div>
+							  <div class="column-chart__container">
+								 <div class="column-chart__header">${this.options.value || ""}</div>
+								 <div class="column-chart__chart"></div>
+							  </div>
+                            `;
         return wrapper;
     }
 
-    get chartHeight() {
-        return 50;
-        //return Math.max(this.options.data);
-    }
-
-    get isOptionsEmpty() {
-        return !(this.options && this.options.data && this.options.data.length > 0);
-    }
-
-    get childElementCount() {
-        return this.isOptionsEmpty ? this.options.data.length : 0;
-    }
-
-    update(newOptions) {
-        //console.log(this.options.data);
-        this.options.data = newOptions.bodyData ?? [];
-        let chart = this._element.querySelector(".column-chart__chart");
+    update(newOptions = {}) {
+        this.options.data = newOptions.bodyData || [];
+        const chart = this.element.querySelector(".column-chart__chart");
         this.fillChartData(chart);
     }
 
     remove() {
-        this._element.remove();
+        this.element.remove();
     }
 
     destroy() {
