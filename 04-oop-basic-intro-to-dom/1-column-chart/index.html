@@ -7,19 +7,34 @@
   </head>
 
   <body>
-    <div class="dashboard__charts">
+    <!--
+    <h2>ColumnCharts with data and without data</h2>
+    -->
+    <div class="dashboard__charts" id="dashboard__charts">
+      
       <div id="orders" class="dashboard__chart_orders"></div>
       <div id="sales" class="dashboard__chart_sales"></div>
       <div id="customers" class="dashboard__chart_customers"></div>
+    
     </div>
 
     <script type="module">
       import ColumnChart from './index.js';
+	  
+	  
+	    const link = 'https://google.com';
 
+		let columnChart1 = new ColumnChart({ link });
+		//console.log(columnChart1.element.innerHTML);
+	  
+		/*
       const ordersData = [];
-      const salesData = [ 30, 40, 20, 80, 35, 15 ];
-      const customersData = [ 100, 90, 80, 35, 90, 25 ];
+      //const salesData = [ 30, 40, 20, 80, 35, 15, 30, 40, 20, 80, 35, 15, 30, 40, 20, 80, 35, 15 ];
+     // const customersData = [ 35, 15, 30, 40, 20, 80, 35, 15, 50, 70, 80, 35, 90, 25 ];
+      const salesData = [30, 40, 20, 80, 35, 15];
+      const customersData = [100, 90, 80, 35, 90, 25];
 
+     
       const ordersChart = new ColumnChart({
         data: ordersData,
         label: 'orders',
@@ -39,9 +54,41 @@
         value: 321
       });
 
+
       orders.append(ordersChart.element);
       sales.append(salesChart.element);
       customers.append(customersChart.element);
+  
+
+      customersChart.update({bodyData: [20]});
+	  */
+            
+      //document.getElementById("dashboard__charts").append(ordersChart.element);
+     // document.getElementById("dashboard__charts").append(salesChart.element);
+      //document.getElementById("dashboard__charts").append(customersChart.element);
+
+     // console.log(ordersChart.element.parentNode);
+
+//      customersChart.update({data: [20, 30, 40]});
+/*
+salesChart.update({
+        data: [20, 30, 40],
+        label: 'SALES',
+        value: 321,
+        className: "dashboard__chart_sales"
+      });
+*/
+      // ordersChart.destroy();
+    
+
+
+      //const label = 'New label';
+      //var columnChart = new ColumnChart({ label });
+/*
+      let c = new ColumnChart();
+      console.log(c)
+      document.getElementById("dashboard__charts").append(c);
+*/
     </script>
   </body>
 </html>
