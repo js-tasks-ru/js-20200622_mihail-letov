@@ -2,10 +2,7 @@ export default class SortableTable {
 
     constructor(header, options = { }) {
          
-        this.header = header; 
-       // this.header1 = header; 
-        
-        console.log(this.header);
+        this.header = header;         
         this.data = options.data || [];
         this.element = this.createSortable();
     }
@@ -13,10 +10,8 @@ export default class SortableTable {
     createSortable() {
         const table = document.createElement("div");
         table.setAttribute("class", "sortable-table");
-        this.htmlHeader = this.createHeader();
-        this.htmlBody = this.createBody();
-        table.append(this.htmlHeader);
-        table.append(this.htmlBody);
+        this.reloadHeader(table);
+        this.reloadBody(table);
         return table;
     }
 
@@ -56,47 +51,52 @@ export default class SortableTable {
 
     }
 
-    reloadHeader() {
-        const table = document.querySelector(".sortable-table");
+    reloadHeader(table) {
+        table = table || document.querySelector(".sortable-table");
         this.htmlHeader = this.createHeader();
-        document.querySelector(".sortable-table__header").remove();
+        const oldHeader = table.querySelector(".sortable-table__header");
+        if (oldHeader) oldHeader.remove();
         table.prepend(this.htmlHeader);
     }
 
-    reloadBody() {
-        const table = document.querySelector(".sortable-table");
+    reloadBody(table) {
+        table = table || document.querySelector(".sortable-table");
         this.htmlBody = this.createBody();
-        document.querySelector(".sortable-table__body").remove();
+        const oldBody = table.querySelector(".sortable-table__body");
+        if (oldBody) oldBody.remove();
         table.prepend(this.htmlBody);
     }
 
     sortByField(array, field, sortType = "string", order = "asc") {
 
-        function compare(a, b) {                              
+       function compareByType(a, b) {
+           if (sortType === "number") {
+                return (parseInt(a[field]) > parseInt(b[field])) ? 1 : -1;
+           }
+           else {
+               return a[field].localeCompare(b[field], "ru", { sensitivity: 'base' });
+           }
+       }
+
+        function compare(a, b) {                           
             if (a[field] === b[field]) return 0;
             const arRes = {
-                "asc": {
-                    "number": (parseInt(a[field]) > parseInt(b[field])) ? 1 : -1,
-                    "string": a[field].localeCompare(b[field])
-                },
-                "desc": {
-                    "number": (parseInt(a[field]) < parseInt(b[field])) ? 1 : -1,
-                    "string": a[field].localeCompare(b[field]) * -1
-                }
+                "asc": compareByType(a, b),
+                "desc": compareByType(a, b)*-1
             };
-            return arRes[order][sortType];
+            return arRes[order];
         }
 
         return array.sort(compare);
     }
 
     sort(field, order = "asc") {
-            
+          
         const columnSettings = this.header.filter(x => {
-            x.id = field;
+            return (x["id"] === field);
         });        
-        console.log(this.header); 
-        const sortType = (columnSettings && columnSettings.sortType) ? columnSettings.sortType : "string";
+        
+        const sortType = (columnSettings && columnSettings.length && columnSettings[0].sortType) ? columnSettings[0].sortType : "string";        
         this.data = this.sortByField(this.data, field, sortType, order);
         this.reloadHeader();
         this.reloadBody();
