@@ -6,7 +6,7 @@
  */
  
 //https://thread.engineering/2018-08-29-searching-and-sorting-text-with-diacritical-marks-in-javascript/
-//https://stackoverflow.com/questions/19487815/passing-additional-parameters-in-the-comparefunction-of-sort-method
+//https://stackoverflow.com/questions/19	487815/passing-additional-parameters-in-the-comparefunction-of-sort-method
  
 Array.prototype.customSort = function (sortParam) {
 	
