@@ -7,6 +7,13 @@ export default class SortableTable {
         this.element = this.createSortable();
     }
 
+    get subElements() {
+        return {
+            header: this.htmlHeader,
+            body: this.body
+        };
+    }
+
     createSortable() {
         const table = document.createElement("div");
         table.setAttribute("class", "sortable-table");
@@ -45,8 +52,7 @@ export default class SortableTable {
                 link.innerHTML += template;
             });
             htmlBody.append(link);
-        });
-
+        });    
         return htmlBody;
 
     }
@@ -61,10 +67,10 @@ export default class SortableTable {
 
     reloadBody(table) {
         table = table || document.querySelector(".sortable-table");
-        this.htmlBody = this.createBody();
+        this.body = this.createBody();
         const oldBody = table.querySelector(".sortable-table__body");
         if (oldBody) oldBody.remove();
-        table.prepend(this.htmlBody);
+        table.append(this.body);
     }
 
     sortByField(array, field, sortType = "string", order = "asc") {
