@@ -1,7 +1,7 @@
 class Tooltip {
 
     constructor() {
-        this.element = this.create();
+        
     }
 
     initialize() {
@@ -9,8 +9,10 @@ class Tooltip {
         const pointerAreas = document.querySelectorAll(`[data-tooltip]:not([data-tooltip=""])`);
         pointerAreas.forEach(area => {
 
-            area.addEventListener('pointerover', (event) => {
-                document.body.append(this.element);
+            area.addEventListener('pointerover', (event) => {            
+                this.render();
+                const title = event.target.getAttribute("data-tooltip");
+                this.setTitle(title);
             }); 
 
             area.addEventListener('pointerout', (event) => {
@@ -18,17 +20,29 @@ class Tooltip {
             }); 
 
             area.addEventListener('mousemove', (event) => {
-                this.element.style.left = event.screenX + 'px';
-                this.element.style.top = event.screenY + 'px';
+                this.element.style.left = event.clientX + 'px';
+                this.element.style.top = event.clientY + 'px';
             });
 
         });
     
     }
 
+    get element() {
+        return  (document.querySelector(".tooltip") || this.create());
+    }
+
+    render() {
+        document.body.prepend(this.element);
+    }
+
+    setTitle(title) {
+        this.element.innerHTML = title;
+    }
+
     create() {
         const tooltip = document.createElement("div");
-        tooltip.setAttribute("classs", "tooltip");
+        tooltip.setAttribute("class", "tooltip");
         return tooltip;
     }
 
