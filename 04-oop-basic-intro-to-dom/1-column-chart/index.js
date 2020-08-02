@@ -1,11 +1,10 @@
 export default class ColumnChart {
-
-	chartHeight = 50;
-	
+		
     constructor(options = {}) { 
 
 		this.options = options;
 		this.options.data = options.data || [];
+		this.chartHeight = 50;
 		
         this.element = this.renderChart();
         let chart = this.element.querySelector(".column-chart__chart");
